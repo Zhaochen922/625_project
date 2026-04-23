@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>UI Insight</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+  <div class="app-shell">
+    <header class="top-nav card">
+      <div class="brand">
+        <div class="logo">✧</div>
+        <div>
+          <div class="brand-title">UI Insight</div>
+          <div class="brand-sub">AI-Powered UI Analysis</div>
+        </div>
+      </div>
+      <nav class="tabs">
+        <button class="tab active" data-tab="upload">Upload</button>
+        <button class="tab" data-tab="results">Results</button>
+        <button class="tab" data-tab="discussion">Discussion</button>
+        <button class="tab" data-tab="profile">Profile</button>
+      </nav>
+      <div class="avatar-wrap">
+        <button id="avatarBtn" class="avatar">OS</button>
+        <div id="avatarMenu" class="dropdown hidden">
+          <button>View Profile</button>
+          <button>Settings</button>
+          <button>Notifications</button>
+          <button>Help & Support</button>
+          <button>Log Out</button>
+        </div>
+      </div>
+    </header>
+
+    <main class="main card">
+      <section id="upload" class="page active">
+        <div class="upload-grid">
+          <div class="upload-left">
+            <h1>Upload Your UI Screenshot</h1>
+            <p class="muted">Upload any UI screenshot and let our AI analyze its usability and design.</p>
+            <label id="dropZone" class="drop-zone">
+              <input id="fileInput" type="file" accept="image/png,image/jpg,image/jpeg,image/webp" hidden>
+              <div class="upload-icon">☁︎</div>
+              <h3>Drag & drop your screenshot here</h3>
+              <div class="muted">or</div>
+              <span class="btn secondary">Browse File</span>
+              <p class="muted small">Supports PNG, JPG, JPEG, WEBP (max 10MB)</p>
+            </label>
+            <div class="tip card">💡 Tip: Upload clear, high-resolution screenshots for the most accurate analysis.</div>
+          </div>
+          <div class="upload-right card">
+            <h2>Preview</h2>
+            <div class="preview-frame">
+              <img id="previewImage" alt="Upload preview" />
+              <div id="previewPlaceholder" class="muted">No image uploaded yet.</div>
+            </div>
+            <button id="changeFileBtn" class="btn secondary">Change File</button>
+          </div>
+        </div>
+        <button id="runAnalysisBtn" class="btn primary full">Run AI Analysis</button>
+        <p class="muted center">🔒 Your data is private and secure</p>
+      </section>
+
+      <section id="results" class="page">
+        <div class="row-between">
+          <div>
+            <h1>Analysis Results</h1>
+            <p class="muted">AI identified usability issues and suggested practical improvements.</p>
+          </div>
+          <button class="btn secondary">Download Report</button>
+        </div>
+        <div class="results-grid">
+          <div>
+            <div class="row-between section-title"><h2>Usability Issues</h2><span id="issueCount" class="chip danger">0 Issues</span></div>
+            <div id="issuesList" class="stack"></div>
+          </div>
+          <div>
+            <div class="row-between section-title"><h2>Improvement Suggestions</h2><span id="suggestionCount" class="chip success">0 Suggestions</span></div>
+            <div id="suggestionsList" class="stack"></div>
+          </div>
+        </div>
+      </section>
+
+      <section id="discussion" class="page">
+        <div class="row-between">
+          <div>
+            <h1>Community Discussion</h1>
+            <p class="muted">Share ideas, ask questions, and learn from others.</p>
+          </div>
+          <button id="createPostBtn" class="btn primary">Create Post</button>
+        </div>
+        <div class="controls">
+          <div class="left-controls">
+            <button class="filter active" data-sort="latest">Latest</button>
+            <button class="filter" data-sort="top">Top Ideas</button>
+          </div>
+          <input id="searchInput" class="search" placeholder="Search discussions..." />
+        </div>
+        <div class="discussion-grid">
+          <div id="postFeed" class="stack"></div>
+          <aside class="stack">
+            <div class="card side-card">
+              <h3>Top Contributors</h3>
+              <div id="contributors"></div>
+            </div>
+            <div class="card side-card">
+              <h3>Popular Topics</h3>
+              <div id="topics" class="topic-wrap"></div>
+            </div>
+          </aside>
+        </div>
+      </section>
+
+      <section id="profile" class="page">
+        <div id="profileSummary" class="card profile-summary"></div>
+        <div class="profile-grid">
+          <form id="profileForm" class="card form-card">
+            <h2>Account Settings</h2>
+            <label>Full Name<input name="fullName" required></label>
+            <label>Email<input type="email" name="email" required></label>
+            <label>Bio<textarea name="bio"></textarea></label>
+            <button class="btn primary" type="submit">Save Changes</button>
+          </form>
+          <form id="passwordForm" class="card form-card">
+            <h2>Change Password</h2>
+            <label>New Password<input type="password" name="newPassword" required></label>
+            <label>Confirm Password<input type="password" name="confirmPassword" required></label>
+            <button class="btn primary" type="submit">Update Password</button>
+          </form>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <dialog id="postDialog">
+    <form id="createPostForm" method="dialog" class="dialog-content">
+      <h2>Create Post</h2>
+      <label>Title<input name="title" required></label>
+      <label>Preview<textarea name="preview" required></textarea></label>
+      <label>Your Name<input name="author" required></label>
+      <label>Topic<input name="topic" required></label>
+      <div class="row-end">
+        <button type="button" class="btn secondary" id="cancelPostBtn">Cancel</button>
+        <button type="submit" class="btn primary">Publish</button>
+      </div>
+    </form>
+  </dialog>
+
+  <script src="/app.js"></script>
+</body>
+</html>
