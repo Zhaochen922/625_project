@@ -1,0 +1,9 @@
+{
+  "name": "ui-insight-app",
+  "version": "1.0.0",
+  "description": "Full-stack UI Insight demo app",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  }
+}
