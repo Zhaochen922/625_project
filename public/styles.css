@@ -18,9 +18,18 @@ body {
   background: var(--bg);
   color: var(--text);
   font-family: Inter, system-ui, -apple-system, sans-serif;
+  overflow-x: hidden;
 }
 
-.app-shell { padding: 16px; }
+.app-shell {
+  --ui-scale: 0.9;
+  padding: 16px;
+  max-width: 1600px;
+  margin: 0 auto;
+  width: calc(100% / var(--ui-scale));
+  transform: scale(var(--ui-scale));
+  transform-origin: top center;
+}
 .card {
   background: var(--surface);
   border: 1px solid var(--border);
@@ -206,6 +215,12 @@ dialog { border: none; border-radius: 16px; box-shadow: var(--shadow); width: mi
 .dialog-content { display: flex; flex-direction: column; gap: 12px; }
 
 @media (max-width: 1200px) {
+  .app-shell {
+    --ui-scale: 1;
+    width: 100%;
+    transform: none;
+  }
+
   h1 { font-size: 38px; }
   .upload-grid, .results-grid, .discussion-grid, .profile-grid { grid-template-columns: 1fr; }
   .tabs { gap: 8px; }
