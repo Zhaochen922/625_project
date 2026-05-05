@@ -111,7 +111,33 @@ async function loadPosts() {
   if (!Array.isArray(posts)) posts = [];
   const mergedPosts = [...state.localPosts, ...posts.filter((p) => !state.localPosts.some((lp) => lp.id === p.id))];
   qs('#postFeed').innerHTML = mergedPosts.map(postCard).join('');
-  qsa('.comment-form').forEach((form) => form.addEventListener('submit', async (e) => { e.preventDefault(); const postId = form.dataset.id; const formData = new FormData(form); await api(`/api/posts/${postId}/comments`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(Object.fromEntries(formData.entries())) }); loadPosts(); }));
+  qsa('.comment-form').forEach((form) => form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const postId = Number(form.dataset.id);
+    const formData = new FormData(form);
+    const payload = Object.fromEntries(formData.entries());
+    if (!payload.user || !payload.text) return;
+    try {
+      await api(`/api/posts/${postId}/comments`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+      form.reset();
+      await loadPosts();
+    } catch (err) {
+      const localPost = state.localPosts.find((p) => p.id === postId);
+      if (localPost) {
+        if (!Array.isArray(localPost.comments)) localPost.comments = [];
+        localPost.comments.push({ id: Date.now(), user: payload.user, text: payload.text });
+        localPost.commentsCount = localPost.comments.length;
+        form.reset();
+        await loadPosts();
+      } else {
+        alert(err.message);
+      }
+    }
+  }));
   qsa('[data-image-preview]').forEach((img) => img.addEventListener('click', () => { qs('#imagePreviewLarge').src = img.dataset.imagePreview; qs('#imagePreviewDialog').showModal(); }));
 
   qsa('.like-btn').forEach((btn) => btn.addEventListener('click', async () => {
