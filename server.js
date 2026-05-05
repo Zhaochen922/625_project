@@ -92,23 +92,6 @@ const sampleAnalysis = {
 };
 
 
-function makeExtraPosts(count = 10) {
-  const topics = ['UX Design', 'Navigation', 'Accessibility', 'Forms', 'Dashboard', 'Onboarding'];
-  return Array.from({ length: count }, (_, i) => ({
-    id: 500 + i,
-    title: `Extra community discussion ${i + 1}`,
-    preview: 'Share ideas to improve interface clarity, consistency, and flow.',
-    author: `Guest User ${i + 1}`,
-    time: `${i + 3}h ago`,
-    topic: topics[i % topics.length],
-    imageUrl: '',
-    commentsCount: (i % 7) + 1,
-    likes: (i % 15) + 4,
-    comments: []
-  }));
-}
-
-
 const randomCommentPool = [
   'Great point—try simplifying the first step.',
   'I had a similar issue; clearer labels helped a lot.',
@@ -203,7 +186,6 @@ const server = http.createServer(async (req, res) => {
       const q = (searchParams.get('q') || '').toLowerCase();
       let posts = [...db.posts];
       if (q) posts = posts.filter((p) => [p.title, p.preview, p.author, p.topic].join(' ').toLowerCase().includes(q));
-      if (posts.length < 30) posts = [...posts, ...makeExtraPosts(30 - posts.length)];
       posts = posts.map((p) => ({ ...p, commentsCount: Array.isArray(p.comments) ? p.comments.length : (p.commentsCount || 0) }));
       posts.sort((a, b) => (sort === 'top' ? b.likes - a.likes : b.id - a.id));
       return sendJson(res, 200, posts);

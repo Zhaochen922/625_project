@@ -92,22 +92,6 @@ async function runAnalysis() {
 }
 
 
-function generateFallbackPosts(count = 30) {
-  const topics = ['UX Design', 'Navigation', 'Accessibility', 'Forms', 'Dashboard', 'Onboarding'];
-  return Array.from({ length: count }, (_, i) => ({
-    id: 1000 + i,
-    title: `Community feedback request #${i + 1}`,
-    preview: 'Looking for suggestions to improve clarity, hierarchy, and usability in this interface.',
-    author: `Member ${i + 1}`,
-    time: `${i + 1}h ago`,
-    topic: topics[i % topics.length],
-    imageUrl: '',
-    commentsCount: (i % 9) + 1,
-    likes: (i % 20) + 3,
-    comments: []
-  }));
-}
-
 function postCard(post) {
   const comments = post.comments?.map((c) => `<div class="muted small">${c.user}: ${c.text}</div>`).join('') || '';
   const safeImage = post.imageUrl || '';
@@ -121,10 +105,10 @@ async function loadPosts() {
   let posts = [];
   try {
     posts = await api(`/api/posts?sort=${state.currentSort}&q=${encodeURIComponent(state.currentSearch)}`);
-  } catch {
-    posts = generateFallbackPosts(30);
+  } catch (err) {
+    console.error(err);
   }
-  if (!Array.isArray(posts) || posts.length === 0) posts = generateFallbackPosts(30);
+  if (!Array.isArray(posts)) posts = [];
   const mergedPosts = [...state.localPosts, ...posts.filter((p) => !state.localPosts.some((lp) => lp.id === p.id))];
   qs('#postFeed').innerHTML = mergedPosts.map(postCard).join('');
   qsa('.comment-form').forEach((form) => form.addEventListener('submit', async (e) => { e.preventDefault(); const postId = form.dataset.id; const formData = new FormData(form); await api(`/api/posts/${postId}/comments`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(Object.fromEntries(formData.entries())) }); loadPosts(); }));
