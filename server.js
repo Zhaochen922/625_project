@@ -44,6 +44,40 @@ const db = {
   lastCommentId: 1
 };
 
+
+
+const uxTopics = {
+  "low color contrast": "Low color contrast reduces readability, especially for users with low vision. Increase luminance difference and validate key text/background pairs against WCAG AA.",
+  "unclear navigation": "Unclear navigation slows task completion. Use explicit labels, reduce menu depth, and keep current-location indicators visible.",
+  "poor hierarchy": "Poor hierarchy makes it hard to prioritize information. Emphasize key actions with stronger size, spacing, and typographic contrast.",
+  "confusing labels": "Confusing labels cause errors and hesitation. Replace jargon with user language and pair labels with concise helper text.",
+  "accessibility": "Accessibility improvements benefit all users. Ensure keyboard focus states, semantic structure, and text alternatives are consistently present.",
+  "feedback visibility": "Users need immediate feedback after actions. Add visible loading, success, and error states close to where interactions happen.",
+  "form design": "Improve form completion by grouping related fields, shortening labels, and validating inline with actionable messages.",
+  "layout structure": "A stable layout structure improves scanability. Align components to a spacing system and avoid abrupt visual jumps.",
+  "task flow": "Task flow should minimize cognitive load. Break complex flows into clear steps and show progress indicators.",
+  "error prevention": "Prevent errors with defaults, constraints, and confirmation for destructive actions before submission.",
+  "consistency": "Consistency helps users predict outcomes. Reuse components, interaction patterns, and terminology across screens.",
+  "readability": "Readability improves comprehension. Use comfortable line lengths, adequate spacing, and clear typographic hierarchy.",
+  "redesign suggestions": "Actionable redesign starts with top-impact fixes: contrast, hierarchy, and task clarity. Prioritize by severity and user impact."
+};
+
+const topicKeys = Object.keys(uxTopics);
+const mockAiResponses = Array.from({ length: 130 }, (_, i) => {
+  const topic = topicKeys[i % topicKeys.length];
+  return {
+    id: i + 1,
+    topic,
+    text: `${uxTopics[topic]} Recommendation ${i + 1}: run a focused usability check on this area and track completion rate, error rate, and perceived ease.`
+  };
+});
+
+const userDirectory = {
+  'Ethan Park': { name: 'Ethan Park', role: 'Product Designer', email: 'ethan.park@mockmail.dev', postsCount: 14, bio: 'Designs onboarding and growth flows for productivity apps.' },
+  'Aisha Khan': { name: 'Aisha Khan', role: 'UX Researcher', email: 'aisha.khan@mockmail.dev', postsCount: 10, bio: 'Research-driven UX specialist focused on dashboards and analytics.' },
+  'Sarah Johnson': { name: 'Sarah Johnson', role: 'Accessibility Advocate', email: 'sarah.johnson@mockmail.dev', postsCount: 19, bio: 'Helps teams ship inclusive interfaces and stronger UI copy.' }
+};
+
 const sampleAnalysis = {
   issues: [
     { id: 1, title: 'Low Color Contrast', description: 'Some text elements have insufficient contrast against their background.', principle: 'Visibility', severity: 'High' },
@@ -134,10 +168,10 @@ const server = http.createServer(async (req, res) => {
     }
 
     if (pathname === '/api/posts' && req.method === 'POST') {
-      const { title, preview, author, topic } = await readBody(req);
+      const { title, preview, author, topic, imageUrl } = await readBody(req);
       if (!title || !preview || !author || !topic) return sendJson(res, 400, { error: 'title, preview, author, topic are required.' });
       db.lastPostId += 1;
-      const post = { id: db.lastPostId, title, preview, author, topic, time: 'Just now', commentsCount: 0, likes: 0, comments: [] };
+      const post = { id: db.lastPostId, title, preview, author, topic, imageUrl: imageUrl || '', time: 'Just now', commentsCount: 0, likes: 0, comments: [] };
       db.posts.push(post);
       db.profile.stats.discussions += 1;
       return sendJson(res, 201, post);
@@ -188,6 +222,33 @@ const server = http.createServer(async (req, res) => {
       });
     }
 
+
+
+    if (pathname === '/api/analysis/chat' && req.method === 'POST') {
+      const { question = '', analysis } = await readBody(req);
+      const normalized = question.toLowerCase();
+      const detectedTopic = topicKeys.find((topic) => normalized.includes(topic)) || topicKeys.find((topic) => topic.split(' ').some((k) => normalized.includes(k))) || 'redesign suggestions';
+      const relevant = mockAiResponses.filter((r) => r.topic === detectedTopic);
+      const pick = relevant[Math.floor(Math.random() * relevant.length)] || mockAiResponses[0];
+      const issueTitles = (analysis?.issues || sampleAnalysis.issues).map((i) => i.title).slice(0, 2).join(', ');
+      return sendJson(res, 200, { answer: `${pick.text} Based on this analysis, pay extra attention to: ${issueTitles}.` });
+    }
+
+    if (pathname === '/api/users/profile' && req.method === 'GET') {
+      const name = searchParams.get('name') || '';
+      return sendJson(res, 200, userDirectory[name] || { name, role: 'Community Member', email: `${name.toLowerCase().replace(/\s+/g, '.')}@mockmail.dev`, postsCount: 3, bio: 'Active community participant sharing UI/UX ideas.' });
+    }
+
+    if (pathname === '/api/users/message' && req.method === 'POST') {
+      const { to = 'Community Member', text = '' } = await readBody(req);
+      const responses = [
+        `Thanks for the message. I agree we should prioritize clearer hierarchy first.`,
+        `Great point. I'd start with contrast and labeling updates before layout refinements.`,
+        `I like this direction. We can test that change quickly with a short usability session.`
+      ];
+      const reply = responses[text.length % responses.length];
+      return sendJson(res, 200, { to, reply });
+    }
     if (pathname === '/' || pathname === '/index.html') return serveFile(res, path.join(PUBLIC_DIR, 'index.html'));
     if (pathname === '/styles.css') return serveFile(res, path.join(PUBLIC_DIR, 'styles.css'));
     if (pathname === '/app.js') return serveFile(res, path.join(PUBLIC_DIR, 'app.js'));
