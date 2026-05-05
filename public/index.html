@@ -84,6 +84,16 @@
             <div id="suggestionsList" class="stack"></div>
           </div>
         </div>
+      
+        <div class="result-chat card">
+          <h3>Continue Discussing This Result</h3>
+          <div id="resultChatLog" class="chat-log"></div>
+          <form id="resultChatForm" class="chat-form">
+            <input name="message" placeholder="Ask AI follow-up questions about this result..." required />
+            <button class="btn primary" type="submit">Send</button>
+          </form>
+        </div>
+
       </section>
 
       <section id="discussion" class="page">
@@ -144,12 +154,17 @@
       <label>Preview<textarea name="preview" required></textarea></label>
       <label>Your Name<input name="author" required></label>
       <label>Topic<input name="topic" required></label>
+      <label>Post Image<input id="postImageInput" type="file" accept="image/*"></label>
       <div class="row-end">
         <button type="button" class="btn secondary" id="cancelPostBtn">Cancel</button>
         <button type="submit" class="btn primary">Publish</button>
       </div>
     </form>
   </dialog>
+
+
+  <dialog id="imagePreviewDialog"><div class="dialog-content"><button id="closeImagePreview" class="close-btn" type="button">✕</button><img id="largePreviewImage" class="large-image" alt="Post image" /></div></dialog>
+  <dialog id="userProfileDialog"><div class="dialog-content"><button id="closeUserProfile" class="close-btn" type="button">✕</button><div id="userProfileContent"></div><form id="messageForm" class="stack"><label>Message<input name="message" required></label><button class="btn primary" type="submit">Message</button></form><div id="messageStatus" class="muted small"></div></div></dialog>
 
   <script src="/app.js"></script>
 </body>

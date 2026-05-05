@@ -226,3 +226,12 @@ dialog { border: none; border-radius: 16px; box-shadow: var(--shadow); width: mi
   .tabs { gap: 8px; }
   .tab { font-size: 18px; }
 }
+
+.post-thumb{width:90px;height:90px;object-fit:cover;border-radius:8px;cursor:pointer;margin:8px 0}
+.close-btn{border:none;background:transparent;font-size:20px;float:right;cursor:pointer}
+.large-image{max-width:80vw;max-height:80vh;display:block;margin-top:24px}
+.author-link{background:none;border:none;color:#335cff;cursor:pointer;font-weight:700;padding:0}
+.chat-log{max-height:220px;overflow:auto;border:1px solid #e5e7eb;border-radius:8px;padding:10px;margin:10px 0;display:flex;flex-direction:column;gap:8px}
+.chat-form{display:flex;gap:8px}
+.chat-form input{flex:1}
+.result-chat{margin-top:16px}
