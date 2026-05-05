@@ -227,7 +227,7 @@ const server = http.createServer(async (req, res) => {
     if (pathname === '/api/analysis/chat' && req.method === 'POST') {
       const { question = '', analysis } = await readBody(req);
       const normalized = question.toLowerCase();
-      const detectedTopic = topicKeys.find((topic) => normalized.includes(topic)) || topicKeys.find((topic) => topic.split(' ').some((k) => normalized.includes(k))) || 'redesign suggestions';
+      const detectedTopic = topicKeys.find((topic) => normalized.includes(topic)) || (normalized.includes('contrast') ? 'low color contrast' : null) || topicKeys.find((topic) => topic.split(' ').some((k) => normalized.includes(k))) || 'redesign suggestions';
       const relevant = mockAiResponses.filter((r) => r.topic === detectedTopic);
       const pick = relevant[Math.floor(Math.random() * relevant.length)] || mockAiResponses[0];
       const issueTitles = (analysis?.issues || sampleAnalysis.issues).map((i) => i.title).slice(0, 2).join(', ');

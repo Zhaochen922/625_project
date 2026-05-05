@@ -69,7 +69,8 @@ async function runAnalysis() {
 
 function postCard(post) {
   const comments = post.comments?.map((c) => `<div class="muted small">${c.user}: ${c.text}</div>`).join('') || '';
-  const postImage = post.imageUrl ? `<img src="${post.imageUrl}" alt="Post upload" class="post-thumb" data-image-preview="${post.imageUrl}" />` : '';
+  const safeImage = post.imageUrl || '';
+  const postImage = safeImage ? `<img src="${safeImage}" alt="Post upload" class="post-thumb" data-image-preview="${safeImage}" />` : '';
   return `<article class="card post-card"><h3>${post.title}</h3><p class="muted">${post.preview}</p>${postImage}<div class="post-meta"><strong class="author-link" data-author="${post.author}">${post.author}</strong> • ${post.time} <span class="chip">${post.topic}</span></div><div class="post-actions">💬 ${post.commentsCount} 👍 ${post.likes}</div><div class="stack" style="margin-top:10px">${comments}</div><form class="comment-form" data-id="${post.id}" style="margin-top:12px;display:flex;gap:8px;"><input name="user" placeholder="Your name" required /><input name="text" placeholder="Add a comment..." required style="flex:1" /><button class="btn secondary" type="submit">Reply</button></form></article>`;
 }
 
@@ -79,10 +80,14 @@ async function loadPosts() {
   qsa('.comment-form').forEach((form) => form.addEventListener('submit', async (e) => { e.preventDefault(); const postId = form.dataset.id; const formData = new FormData(form); await api(`/api/posts/${postId}/comments`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(Object.fromEntries(formData.entries())) }); loadPosts(); }));
   qsa('[data-image-preview]').forEach((img) => img.addEventListener('click', () => { qs('#imagePreviewLarge').src = img.dataset.imagePreview; qs('#imagePreviewDialog').showModal(); }));
   qsa('.author-link').forEach((el) => el.addEventListener('click', async () => {
-    const profile = await api(`/api/users/profile?name=${encodeURIComponent(el.dataset.author)}`);
-    state.selectedProfile = profile;
-    qs('#userProfileBody').innerHTML = `<p><strong>Name:</strong> ${profile.name}</p><p><strong>Role:</strong> ${profile.role}</p><p><strong>Email:</strong> ${profile.email}</p><p><strong>Posts:</strong> ${profile.postsCount}</p><p><strong>Bio:</strong> ${profile.bio}</p>`;
-    qs('#userProfileDialog').showModal();
+    try {
+      const profile = await api(`/api/users/profile?name=${encodeURIComponent(el.dataset.author || '')}`);
+      state.selectedProfile = profile;
+      qs('#userProfileBody').innerHTML = `<p><strong>Name:</strong> ${profile.name}</p><p><strong>Role:</strong> ${profile.role}</p><p><strong>Email:</strong> ${profile.email}</p><p><strong>Posts:</strong> ${profile.postsCount}</p><p><strong>Bio:</strong> ${profile.bio}</p>`;
+      qs('#userProfileDialog').showModal();
+    } catch (err) {
+      alert(err.message);
+    }
   }));
 }
 
@@ -100,10 +105,21 @@ async function init() {
 
   qs('#analysisChatForm').addEventListener('submit', async (e) => {
     e.preventDefault();
-    const input = qs('#analysisChatInput'); const question = input.value.trim(); if (!question) return;
-    appendChatBubble(qs('#analysisChatMessages'), question, 'user'); input.value = '';
-    const chat = await api('/api/analysis/chat', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ question, analysis: state.currentAnalysis }) });
-    appendChatBubble(qs('#analysisChatMessages'), chat.answer, 'ai');
+    const input = qs('#analysisChatInput');
+    const question = input.value.trim();
+    if (!question) return;
+    appendChatBubble(qs('#analysisChatMessages'), question, 'user');
+    input.value = '';
+    try {
+      const chat = await api('/api/analysis/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ question, analysis: state.currentAnalysis || {} })
+      });
+      appendChatBubble(qs('#analysisChatMessages'), chat.answer || 'Here is a follow-up recommendation based on your analysis results.', 'ai');
+    } catch (err) {
+      appendChatBubble(qs('#analysisChatMessages'), `I can still help with that. ${err.message}`, 'ai');
+    }
   });
 
   const dialog = qs('#postDialog');
@@ -114,8 +130,14 @@ async function init() {
     if (imageFile && imageFile.size) {
       imageUrl = await new Promise((resolve, reject) => { const reader = new FileReader(); reader.onload = () => resolve(reader.result); reader.onerror = reject; reader.readAsDataURL(imageFile); });
     }
-    await api('/api/posts', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ title: formData.get('title'), preview: formData.get('preview'), author: formData.get('author'), topic: formData.get('topic'), imageUrl }) }).catch((err) => alert(err.message));
-    dialog.close(); e.target.reset(); loadPosts();
+    try {
+      await api('/api/posts', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ title: formData.get('title'), preview: formData.get('preview'), author: formData.get('author'), topic: formData.get('topic'), imageUrl }) });
+      dialog.close();
+      e.target.reset();
+      await loadPosts();
+    } catch (err) {
+      alert(err.message);
+    }
   });
 
   qs('#closeImagePreview').addEventListener('click', () => qs('#imagePreviewDialog').close());
