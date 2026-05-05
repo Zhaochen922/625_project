@@ -240,3 +240,6 @@ dialog { border: none; border-radius: 16px; box-shadow: var(--shadow); width: mi
 .image-modal-content { position: relative; padding-top: 20px; }
 .image-modal-content img { width: min(85vw, 800px); max-height: 80vh; object-fit: contain; border-radius: 12px; }
 .image-modal-close { position: absolute; top: -4px; right: 0; border: none; background: transparent; font-size: 24px; cursor: pointer; }
+
+.post-image-wrap { margin: 10px 0 12px; }
+.post-thumb { display: block; }

@@ -17,30 +17,28 @@ const db = {
   },
   password: 'password123',
   posts: [
-    {
-      id: 1,
-      title: 'How can I improve the onboarding flow of this app?',
-      preview: 'I\'m working on a financial app and would love feedback on the onboarding experience. What could be clearer or more engaging?',
-      author: 'Ethan Park',
-      time: '2h ago',
-      topic: 'UX Design',
-      commentsCount: 12,
-      likes: 24,
-      comments: [{ id: 1, user: 'Sarah Johnson', text: 'Try progressive disclosure and fewer fields on first step.' }]
-    },
-    {
-      id: 2,
-      title: 'Thoughts on this dashboard layout',
-      preview: 'Trying to simplify the dashboard for better readability. Any suggestions on reducing cognitive load?',
-      author: 'Aisha Khan',
-      time: '5h ago',
-      topic: 'Dashboard',
-      commentsCount: 8,
-      likes: 18,
-      comments: []
-    }
+    { id: 1, title: 'How can I improve the onboarding flow of this app?', preview: 'I\'m working on a financial app and would love feedback on the onboarding experience. What could be clearer or more engaging?', author: 'Ethan Park', time: '2h ago', topic: 'UX Design', imageUrl: '', commentsCount: 12, likes: 24, comments: [{ id: 1, user: 'Sarah Johnson', text: 'Try progressive disclosure and fewer fields on first step.' }] },
+    { id: 2, title: 'Thoughts on this dashboard layout', preview: 'Trying to simplify the dashboard for better readability. Any suggestions on reducing cognitive load?', author: 'Aisha Khan', time: '5h ago', topic: 'Dashboard', imageUrl: '', commentsCount: 8, likes: 18, comments: [] },
+    { id: 3, title: 'Are these CTA buttons clear enough?', preview: 'Users skip the main action in testing. Should I change wording or placement?', author: 'Liam Chen', time: '7h ago', topic: 'Buttons', imageUrl: '', commentsCount: 5, likes: 11, comments: [] },
+    { id: 4, title: 'Need feedback on mobile checkout steps', preview: 'Checkout has four steps and some drop-off in step 2. Looking for friction points.', author: 'Nora Patel', time: '9h ago', topic: 'E-commerce', imageUrl: '', commentsCount: 7, likes: 14, comments: [] },
+    { id: 5, title: 'Best way to show validation errors?', preview: 'I currently show errors only after submit. Should I do inline validation too?', author: 'Marco Ruiz', time: '11h ago', topic: 'Forms', imageUrl: '', commentsCount: 4, likes: 9, comments: [] },
+    { id: 6, title: 'Does this card layout feel too dense?', preview: 'Trying to fit more analytics without overwhelming users. Need hierarchy advice.', author: 'Yuna Kim', time: '12h ago', topic: 'Layout', imageUrl: '', commentsCount: 6, likes: 13, comments: [] },
+    { id: 7, title: 'Improving empty state messaging', preview: 'My empty states feel generic. Any examples of better guidance copy?', author: 'David Cole', time: '14h ago', topic: 'UX Writing', imageUrl: '', commentsCount: 3, likes: 7, comments: [] },
+    { id: 8, title: 'Navigation menu confusion in user tests', preview: 'Users struggle to find settings and billing pages.', author: 'Priya Rao', time: '16h ago', topic: 'Navigation', imageUrl: '', commentsCount: 10, likes: 16, comments: [] },
+    { id: 9, title: 'Typography scale review request', preview: 'Is my heading/body scale too subtle? Looking for readability suggestions.', author: 'Noah Gray', time: '18h ago', topic: 'Typography', imageUrl: '', commentsCount: 2, likes: 6, comments: [] },
+    { id: 10, title: 'How to reduce cognitive load on reports page?', preview: 'Report filters and charts are all above the fold and users feel overwhelmed.', author: 'Mia Lopez', time: '20h ago', topic: 'Analytics', imageUrl: '', commentsCount: 9, likes: 17, comments: [] },
+    { id: 11, title: 'Accessibility check for color palette', preview: 'Can someone review my palette for contrast issues before dev handoff?', author: 'Sarah Johnson', time: '22h ago', topic: 'Accessibility', imageUrl: '', commentsCount: 13, likes: 21, comments: [] },
+    { id: 12, title: 'Should I combine these two form fields?', preview: 'Address form seems long. Thinking of combining optional company fields.', author: 'Owen Price', time: '1d ago', topic: 'Forms', imageUrl: '', commentsCount: 5, likes: 10, comments: [] },
+    { id: 13, title: 'Feedback on first-time tooltip tour', preview: 'Tooltip walkthrough may be too verbose. Any tips for concise onboarding?', author: 'Hana Suzuki', time: '1d ago', topic: 'Onboarding', imageUrl: '', commentsCount: 6, likes: 12, comments: [] },
+    { id: 14, title: 'Is this table sorting interaction obvious?', preview: 'Users miss that columns are sortable. How can I improve affordance?', author: 'Ben Carter', time: '1d ago', topic: 'Data Table', imageUrl: '', commentsCount: 4, likes: 8, comments: [] },
+    { id: 15, title: 'Review my profile settings page structure', preview: 'I split account/security/notification settings—does this grouping make sense?', author: 'Ivy Nguyen', time: '1d ago', topic: 'Information Architecture', imageUrl: '', commentsCount: 7, likes: 15, comments: [] },
+    { id: 16, title: 'Need ideas for success state design', preview: 'After submitting, users are unsure what happens next.', author: 'Kai Morgan', time: '1d ago', topic: 'System Feedback', imageUrl: '', commentsCount: 8, likes: 14, comments: [] },
+    { id: 17, title: 'Are my icon labels too ambiguous?', preview: 'Icon-only controls are causing misclicks in testing.', author: 'Sofia Mendes', time: '1d ago', topic: 'Iconography', imageUrl: '', commentsCount: 3, likes: 9, comments: [] },
+    { id: 18, title: 'Help with progressive disclosure in advanced filters', preview: 'Advanced filter panel feels intimidating for new users.', author: 'Arjun Mehta', time: '2d ago', topic: 'Interaction Design', imageUrl: '', commentsCount: 6, likes: 11, comments: [] },
+    { id: 19, title: 'Comparing two hero section variants', preview: 'Variant A is minimal, B is feature-heavy. Which one converts better for clarity?', author: 'Zoe Bennett', time: '2d ago', topic: 'Landing Page', imageUrl: '', commentsCount: 5, likes: 10, comments: [] },
+    { id: 20, title: 'Any tips for reducing error rates in signup?', preview: 'Seeing many password and phone-number format errors.', author: 'Rafael Diaz', time: '2d ago', topic: 'Error Prevention', imageUrl: '', commentsCount: 11, likes: 20, comments: [] }
   ],
-  lastPostId: 2,
+  lastPostId: 20,
   lastCommentId: 1
 };
 

@@ -88,8 +88,8 @@ async function runAnalysis() {
 function postCard(post) {
   const comments = post.comments?.map((c) => `<div class="muted small">${c.user}: ${c.text}</div>`).join('') || '';
   const safeImage = post.imageUrl || '';
-  const postImage = safeImage ? `<img src="${safeImage}" alt="Post upload" class="post-thumb" data-image-preview="${safeImage}" />` : '';
-  return `<article class="card post-card"><h3>${post.title}</h3><p class="muted">${post.preview}</p>${postImage}<div class="post-meta"><strong class="author-link" data-author="${post.author}">${post.author}</strong> • ${post.time} <span class="chip">${post.topic}</span></div><div class="post-actions">💬 ${post.commentsCount} 👍 ${post.likes}</div><div class="stack" style="margin-top:10px">${comments}</div><form class="comment-form" data-id="${post.id}" style="margin-top:12px;display:flex;gap:8px;"><input name="user" placeholder="Your name" required /><input name="text" placeholder="Add a comment..." required style="flex:1" /><button class="btn secondary" type="submit">Reply</button></form></article>`;
+  const postImage = safeImage ? `<div class="post-image-wrap"><img src="${safeImage}" alt="Post upload" class="post-thumb" data-image-preview="${safeImage}" /></div>` : '';
+  return `<article class="card post-card"><h3>${post.title}</h3>${postImage}<p class="muted">${post.preview}</p><div class="post-meta"><strong class="author-link" data-author="${post.author}">${post.author}</strong> • ${post.time} <span class="chip">${post.topic}</span></div><div class="post-actions">💬 ${post.commentsCount} 👍 ${post.likes}</div><div class="stack" style="margin-top:10px">${comments}</div><form class="comment-form" data-id="${post.id}" style="margin-top:12px;display:flex;gap:8px;"><input name="user" placeholder="Your name" required /><input name="text" placeholder="Add a comment..." required style="flex:1" /><button class="btn secondary" type="submit">Reply</button></form></article>`;
 }
 
 async function loadPosts() {
