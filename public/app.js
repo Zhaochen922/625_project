@@ -14,7 +14,12 @@ const qsa = (sel) => [...document.querySelectorAll(sel)];
 function switchTab(tab) {
   qsa('.tab').forEach((btn) => btn.classList.toggle('active', btn.dataset.tab === tab));
   qsa('.page').forEach((page) => page.classList.toggle('active', page.id === tab));
-  if (tab === 'discussion') loadPosts();
+  if (tab === 'discussion') {
+    state.currentSearch = '';
+    const search = qs('#searchInput');
+    if (search) search.value = '';
+    loadPosts();
+  }
   if (tab === 'profile') loadProfile();
 }
 
