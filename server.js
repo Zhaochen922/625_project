@@ -108,6 +108,31 @@ function makeExtraPosts(count = 10) {
   }));
 }
 
+
+const randomCommentPool = [
+  'Great point—try simplifying the first step.',
+  'I had a similar issue; clearer labels helped a lot.',
+  'Consider improving contrast for key actions.',
+  'This flow looks better with fewer form fields.',
+  'Nice direction. Maybe add stronger visual hierarchy.'
+];
+
+function seedRandomComments() {
+  db.posts.forEach((post) => {
+    if (!Array.isArray(post.comments)) post.comments = [];
+    if (post.comments.length === 0) {
+      const n = 1 + Math.floor(Math.random() * 3);
+      for (let i = 0; i < n; i += 1) {
+        db.lastCommentId += 1;
+        post.comments.push({ id: db.lastCommentId, user: `User ${i + 1}`, text: randomCommentPool[(post.id + i) % randomCommentPool.length] });
+      }
+    }
+    post.commentsCount = post.comments.length;
+  });
+}
+
+seedRandomComments();
+
 function sendJson(res, code, data) {
   res.writeHead(code, { 'Content-Type': 'application/json; charset=utf-8' });
   res.end(JSON.stringify(data));
@@ -179,6 +204,7 @@ const server = http.createServer(async (req, res) => {
       let posts = [...db.posts];
       if (q) posts = posts.filter((p) => [p.title, p.preview, p.author, p.topic].join(' ').toLowerCase().includes(q));
       if (posts.length < 30) posts = [...posts, ...makeExtraPosts(30 - posts.length)];
+      posts = posts.map((p) => ({ ...p, commentsCount: Array.isArray(p.comments) ? p.comments.length : (p.commentsCount || 0) }));
       posts.sort((a, b) => (sort === 'top' ? b.likes - a.likes : b.id - a.id));
       return sendJson(res, 200, posts);
     }
@@ -204,6 +230,17 @@ const server = http.createServer(async (req, res) => {
       post.comments.push(comment);
       post.commentsCount += 1;
       return sendJson(res, 201, comment);
+    }
+
+
+    if (pathname.startsWith('/api/posts/') && pathname.endsWith('/like') && req.method === 'POST') {
+      const postId = Number(pathname.split('/')[3]);
+      const post = db.posts.find((p) => p.id === postId);
+      if (!post) return sendJson(res, 404, { error: 'Post not found.' });
+      const { liked } = await readBody(req);
+      if (liked) post.likes += 1;
+      else post.likes = Math.max(0, post.likes - 1);
+      return sendJson(res, 200, { id: post.id, likes: post.likes });
     }
 
     if (pathname === '/api/profile' && req.method === 'GET') return sendJson(res, 200, db.profile);

@@ -5,7 +5,8 @@ const state = {
   currentAnalysis: null,
   selectedProfile: null,
   messageThread: [],
-  localPosts: []
+  localPosts: [],
+  likedPosts: JSON.parse(localStorage.getItem('likedPosts') || '{}')
 };
 
 const qs = (sel) => document.querySelector(sel);
@@ -111,7 +112,9 @@ function postCard(post) {
   const comments = post.comments?.map((c) => `<div class="muted small">${c.user}: ${c.text}</div>`).join('') || '';
   const safeImage = post.imageUrl || '';
   const postImage = safeImage ? `<div class="post-image-wrap"><img src="${safeImage}" alt="Post upload" class="post-thumb" data-image-preview="${safeImage}" /></div>` : '';
-  return `<article class="card post-card"><h3>${post.title}</h3>${postImage}<p class="muted">${post.preview}</p><div class="post-meta"><strong class="author-link" data-author="${post.author}">${post.author}</strong> • ${post.time} <span class="chip">${post.topic}</span></div><div class="post-actions">💬 ${post.commentsCount} 👍 ${post.likes}</div><div class="stack" style="margin-top:10px">${comments}</div><form class="comment-form" data-id="${post.id}" style="margin-top:12px;display:flex;gap:8px;"><input name="user" placeholder="Your name" required /><input name="text" placeholder="Add a comment..." required style="flex:1" /><button class="btn secondary" type="submit">Reply</button></form></article>`;
+  const commentCount = Array.isArray(post.comments) ? post.comments.length : (post.commentsCount || 0);
+  const liked = !!state.likedPosts[post.id];
+  return `<article class="card post-card"><h3>${post.title}</h3>${postImage}<p class="muted">${post.preview}</p><div class="post-meta"><strong class="author-link" data-author="${post.author}">${post.author}</strong> • ${post.time} <span class="chip">${post.topic}</span></div><div class="post-actions">💬 ${commentCount} <button type="button" class="like-btn ${liked ? 'liked' : ''}" data-id="${post.id}">👍 <span>${post.likes}</span></button></div><div class="stack" style="margin-top:10px">${comments}</div><form class="comment-form" data-id="${post.id}" style="margin-top:12px;display:flex;gap:8px;"><input name="user" placeholder="Your name" required /><input name="text" placeholder="Add a comment..." required style="flex:1" /><button class="btn secondary" type="submit">Reply</button></form></article>`;
 }
 
 async function loadPosts() {
@@ -126,6 +129,26 @@ async function loadPosts() {
   qs('#postFeed').innerHTML = mergedPosts.map(postCard).join('');
   qsa('.comment-form').forEach((form) => form.addEventListener('submit', async (e) => { e.preventDefault(); const postId = form.dataset.id; const formData = new FormData(form); await api(`/api/posts/${postId}/comments`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(Object.fromEntries(formData.entries())) }); loadPosts(); }));
   qsa('[data-image-preview]').forEach((img) => img.addEventListener('click', () => { qs('#imagePreviewLarge').src = img.dataset.imagePreview; qs('#imagePreviewDialog').showModal(); }));
+
+  qsa('.like-btn').forEach((btn) => btn.addEventListener('click', async () => {
+    const postId = Number(btn.dataset.id);
+    const nextLiked = !state.likedPosts[postId];
+    try {
+      const data = await api(`/api/posts/${postId}/like`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ liked: nextLiked })
+      });
+      state.likedPosts[postId] = nextLiked;
+      localStorage.setItem('likedPosts', JSON.stringify(state.likedPosts));
+      btn.classList.toggle('liked', nextLiked);
+      const countEl = btn.querySelector('span');
+      if (countEl) countEl.textContent = data.likes;
+    } catch (err) {
+      alert(err.message);
+    }
+  }));
+
   qsa('.author-link').forEach((el) => el.addEventListener('click', async () => {
     let profile;
     try {

@@ -243,3 +243,6 @@ dialog { border: none; border-radius: 16px; box-shadow: var(--shadow); width: mi
 
 .post-image-wrap { margin: 10px 0 12px; }
 .post-thumb { display: block; }
+
+.like-btn { border:none; background:transparent; cursor:pointer; font-size:18px; color:#4f5f82; }
+.like-btn.liked { color:#d02e2e; font-weight:700; }
