@@ -84,6 +84,14 @@
             <div id="suggestionsList" class="stack"></div>
           </div>
         </div>
+        <div class="card analysis-chat" id="analysisChatCard">
+          <h3>Ask Follow-up Questions</h3>
+          <div id="analysisChatMessages" class="chat-messages"></div>
+          <form id="analysisChatForm" class="chat-input-row">
+            <input id="analysisChatInput" name="question" placeholder="Ask about the analysis findings..." required>
+            <button class="btn primary" type="submit">Send</button>
+          </form>
+        </div>
       </section>
 
       <section id="discussion" class="page">
@@ -138,17 +146,44 @@
   </div>
 
   <dialog id="postDialog">
-    <form id="createPostForm" method="dialog" class="dialog-content">
+    <form id="createPostForm" class="dialog-content">
       <h2>Create Post</h2>
       <label>Title<input name="title" required></label>
       <label>Preview<textarea name="preview" required></textarea></label>
       <label>Your Name<input name="author" required></label>
       <label>Topic<input name="topic" required></label>
+      <label>Upload Image<input type="file" name="postImage" id="postImageInput" accept="image/png,image/jpg,image/jpeg,image/webp"></label>
       <div class="row-end">
         <button type="button" class="btn secondary" id="cancelPostBtn">Cancel</button>
         <button type="submit" class="btn primary">Publish</button>
       </div>
     </form>
+  </dialog>
+
+  <dialog id="imagePreviewDialog">
+    <div class="image-modal-content">
+      <button id="closeImagePreview" class="image-modal-close" type="button">✕</button>
+      <img id="imagePreviewLarge" alt="Post image preview" />
+    </div>
+  </dialog>
+
+  <dialog id="userProfileDialog">
+    <div class="dialog-content">
+      <div class="row-between"><h2>User Profile</h2><button id="closeProfileDialog" type="button" class="btn secondary">Close</button></div>
+      <div id="userProfileBody"></div>
+      <div class="row-end"><button id="messageUserBtn" type="button" class="btn primary">Message</button></div>
+    </div>
+  </dialog>
+
+  <dialog id="messageDialog">
+    <div class="dialog-content">
+      <div class="row-between"><h2>Message User</h2><button id="closeMessageDialog" type="button" class="btn secondary">Close</button></div>
+      <div id="messageThread" class="chat-messages" style="max-height:260px"></div>
+      <form id="messageForm" class="chat-input-row">
+        <input id="messageInput" required placeholder="Type a message...">
+        <button class="btn primary" type="submit">Send</button>
+      </form>
+    </div>
   </dialog>
 
   <script src="/app.js"></script>

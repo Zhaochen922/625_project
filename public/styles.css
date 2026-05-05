@@ -226,3 +226,20 @@ dialog { border: none; border-radius: 16px; box-shadow: var(--shadow); width: mi
   .tabs { gap: 8px; }
   .tab { font-size: 18px; }
 }
+
+
+.analysis-chat { margin-top: 18px; padding: 16px; }
+.chat-messages { margin: 12px 0; max-height: 280px; overflow: auto; display: flex; flex-direction: column; gap: 10px; }
+.chat-bubble { padding: 10px 12px; border-radius: 12px; max-width: 85%; font-size: 17px; }
+.chat-bubble.user { background: #eef1ff; align-self: flex-end; }
+.chat-bubble.ai { background: #f4f6fa; align-self: flex-start; }
+.chat-input-row { display: flex; gap: 10px; }
+.chat-input-row input { flex: 1; }
+.author-link { color: var(--primary); cursor: pointer; text-decoration: underline; text-underline-offset: 3px; }
+.post-thumb { width: 84px; height: 84px; object-fit: cover; border-radius: 10px; border: 1px solid var(--border); cursor: pointer; margin-top: 10px; }
+.image-modal-content { position: relative; padding-top: 20px; }
+.image-modal-content img { width: min(85vw, 800px); max-height: 80vh; object-fit: contain; border-radius: 12px; }
+.image-modal-close { position: absolute; top: -4px; right: 0; border: none; background: transparent; font-size: 24px; cursor: pointer; }
+
+.post-image-wrap { margin: 10px 0 12px; }
+.post-thumb { display: block; }
