@@ -4,7 +4,8 @@ const state = {
   currentSearch: '',
   currentAnalysis: null,
   selectedProfile: null,
-  messageThread: []
+  messageThread: [],
+  localPosts: []
 };
 
 const qs = (sel) => document.querySelector(sel);
@@ -93,7 +94,8 @@ function postCard(post) {
 
 async function loadPosts() {
   const posts = await api(`/api/posts?sort=${state.currentSort}&q=${encodeURIComponent(state.currentSearch)}`);
-  qs('#postFeed').innerHTML = posts.map(postCard).join('');
+  const mergedPosts = [...state.localPosts, ...posts.filter((p) => !state.localPosts.some((lp) => lp.id === p.id))];
+  qs('#postFeed').innerHTML = mergedPosts.map(postCard).join('');
   qsa('.comment-form').forEach((form) => form.addEventListener('submit', async (e) => { e.preventDefault(); const postId = form.dataset.id; const formData = new FormData(form); await api(`/api/posts/${postId}/comments`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(Object.fromEntries(formData.entries())) }); loadPosts(); }));
   qsa('[data-image-preview]').forEach((img) => img.addEventListener('click', () => { qs('#imagePreviewLarge').src = img.dataset.imagePreview; qs('#imagePreviewDialog').showModal(); }));
   qsa('.author-link').forEach((el) => el.addEventListener('click', async () => {
@@ -145,11 +147,14 @@ async function init() {
   qs('#createPostForm').addEventListener('submit', async (e) => {
     e.preventDefault(); const formData = new FormData(e.target); const imageFile = formData.get('postImage');
     let imageUrl = '';
-    if (imageFile && imageFile.size) {
-      imageUrl = await new Promise((resolve, reject) => { const reader = new FileReader(); reader.onload = () => resolve(reader.result); reader.onerror = reject; reader.readAsDataURL(imageFile); });
+    const fileFromInput = qs('#postImageInput')?.files?.[0];
+    const selectedImage = (imageFile && imageFile.size) ? imageFile : fileFromInput;
+    if (selectedImage && selectedImage.size) {
+      imageUrl = await new Promise((resolve, reject) => { const reader = new FileReader(); reader.onload = () => resolve(reader.result); reader.onerror = reject; reader.readAsDataURL(selectedImage); });
     }
     try {
-      await api('/api/posts', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ title: formData.get('title'), preview: formData.get('preview'), author: formData.get('author'), topic: formData.get('topic'), imageUrl }) });
+      const created = await api('/api/posts', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ title: formData.get('title'), preview: formData.get('preview'), author: formData.get('author'), topic: formData.get('topic'), imageUrl }) });
+      state.localPosts = [{ ...created, imageUrl: created.imageUrl || imageUrl }, ...state.localPosts.filter((p) => p.id !== created.id)];
       dialog.close();
       e.target.reset();
       await loadPosts();
