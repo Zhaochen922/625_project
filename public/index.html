@@ -107,7 +107,7 @@
             <button class="filter active" data-sort="latest">Latest</button>
             <button class="filter" data-sort="top">Top Ideas</button>
           </div>
-          <input id="searchInput" class="search" placeholder="Search discussions..." />
+          <div class="search-wrap"><span class="search-icon">🔍</span><input id="searchInput" class="search" placeholder="Search discussions..." /></div>
         </div>
         <div class="discussion-grid">
           <div id="postFeed" class="stack"></div>
@@ -136,8 +136,8 @@
           </form>
           <form id="passwordForm" class="card form-card">
             <h2>Change Password</h2>
-            <label>New Password<input type="password" name="newPassword" required></label>
-            <label>Confirm Password<input type="password" name="confirmPassword" required></label>
+            <label>New Password<div class="password-field"><input type="password" name="newPassword" placeholder="Enter new password" required><button type="button" class="toggle-password" data-target="newPassword" aria-label="Toggle password visibility">👁</button></div></label>
+            <label>Confirm Password<div class="password-field"><input type="password" name="confirmPassword" placeholder="Confirm new password" required><button type="button" class="toggle-password" data-target="confirmPassword" aria-label="Toggle password visibility">👁</button></div></label>
             <button class="btn primary" type="submit">Update Password</button>
           </form>
         </div>
