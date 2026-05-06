@@ -101,9 +101,19 @@ async function runAnalysis() {
   qs('#suggestionsList').innerHTML = `${suggestionHtml()}${data.suggestions.length > initialSuggestionCount ? `<div class="comment-toggle" id="moreSuggestions">+ ${renderSuggestionState.expanded ? 'Hide extra suggestions' : `${data.suggestions.length - initialSuggestionCount} more suggestions`}</div>` : ''}`;
   const bindResultsToggles = () => {
     const issueMore = qs('#moreIssues');
-    if (issueMore) issueMore.addEventListener('click', () => { renderIssueState.expanded = !renderIssueState.expanded; runAnalysisRender(data, renderIssueState, renderSuggestionState); });
+    if (issueMore) issueMore.addEventListener('click', () => {
+      const nextExpanded = !renderIssueState.expanded;
+      renderIssueState.expanded = nextExpanded;
+      renderSuggestionState.expanded = nextExpanded;
+      runAnalysisRender(data, renderIssueState, renderSuggestionState);
+    });
     const suggestionMore = qs('#moreSuggestions');
-    if (suggestionMore) suggestionMore.addEventListener('click', () => { renderSuggestionState.expanded = !renderSuggestionState.expanded; runAnalysisRender(data, renderIssueState, renderSuggestionState); });
+    if (suggestionMore) suggestionMore.addEventListener('click', () => {
+      const nextExpanded = !renderSuggestionState.expanded;
+      renderIssueState.expanded = nextExpanded;
+      renderSuggestionState.expanded = nextExpanded;
+      runAnalysisRender(data, renderIssueState, renderSuggestionState);
+    });
   };
   const runAnalysisRender = (analysisData, issueState, suggestionState) => {
     qs('#issuesList').innerHTML = `${analysisData.issues.slice(0, issueState.expanded ? analysisData.issues.length : initialIssueCount).map(createIssueCard).join('')}${analysisData.issues.length > initialIssueCount ? `<div class="comment-toggle" id="moreIssues">+ ${issueState.expanded ? 'Hide extra issues' : `${analysisData.issues.length - initialIssueCount} more issues`}</div>` : ''}`;
@@ -215,7 +225,7 @@ async function init() {
   qsa('.tab').forEach((btn) => btn.addEventListener('click', () => switchTab(btn.dataset.tab)));
   const avatarBtn = qs('#avatarBtn'); const avatarMenu = qs('#avatarMenu'); avatarBtn.addEventListener('click', () => avatarMenu.classList.toggle('hidden')); document.addEventListener('click', (e) => { if (!e.target.closest('.avatar-wrap')) avatarMenu.classList.add('hidden'); });
   const fileInput = qs('#fileInput'); const dropZone = qs('#dropZone'); const changeFileBtn = qs('#changeFileBtn');
-  dropZone.addEventListener('dragover', (e) => e.preventDefault()); dropZone.addEventListener('drop', async (e) => { e.preventDefault(); const file = e.dataTransfer.files[0]; if (file) await uploadFile(file).catch((err) => alert(err.message)); }); dropZone.addEventListener('click', () => fileInput.click()); changeFileBtn.addEventListener('click', () => fileInput.click()); fileInput.addEventListener('change', async (e) => { const file = e.target.files[0]; if (file) await uploadFile(file).catch((err) => alert(err.message)); });
+  dropZone.addEventListener('dragover', (e) => e.preventDefault()); dropZone.addEventListener('drop', async (e) => { e.preventDefault(); const file = e.dataTransfer.files[0]; if (file) await uploadFile(file).catch((err) => alert(err.message)); }); changeFileBtn.addEventListener('click', () => fileInput.click()); fileInput.addEventListener('change', async (e) => { const file = e.target.files[0]; if (file) await uploadFile(file).catch((err) => alert(err.message)); });
   qs('#runAnalysisBtn').addEventListener('click', () => runAnalysis().catch((err) => alert(err.message)));
   qsa('.filter').forEach((btn) => btn.addEventListener('click', () => { qsa('.filter').forEach((b) => b.classList.remove('active')); btn.classList.add('active'); state.currentSort = btn.dataset.sort; loadPosts(); }));
   qs('#searchInput').addEventListener('input', (e) => { state.currentSearch = e.target.value; loadPosts(); });
@@ -275,6 +285,11 @@ async function init() {
 
   qs('#profileForm').addEventListener('submit', async (e) => { e.preventDefault(); const formData = new FormData(e.target); await api('/api/profile', { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(Object.fromEntries(formData.entries())) }).then(() => alert('Profile updated')).catch((err) => alert(err.message)); loadProfile(); });
   qs('#passwordForm').addEventListener('submit', async (e) => { e.preventDefault(); const formData = new FormData(e.target); await api('/api/profile/password', { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(Object.fromEntries(formData.entries())) }).then(() => { alert('Password updated'); e.target.reset(); }).catch((err) => alert(err.message)); });
+  qsa('.toggle-password').forEach((btn) => btn.addEventListener('click', () => {
+    const targetInput = qs(`#passwordForm input[name="${btn.dataset.target}"]`);
+    if (!targetInput) return;
+    targetInput.type = targetInput.type === 'password' ? 'text' : 'password';
+  }));
 
   const latestUpload = await api('/api/upload/latest'); if (latestUpload.imageUrl) { state.uploadedImageUrl = latestUpload.imageUrl; renderPreview(latestUpload.imageUrl); }
   await Promise.all([loadMeta(), loadPosts(), loadProfile()]);
