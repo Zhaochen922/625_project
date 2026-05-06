@@ -200,14 +200,6 @@ h3 { font-size: 20px; margin: 0; }
   gap: 8px;
 }
 .filter.active { border-color: #8791ff; color: var(--primary); background: #f4f6ff; }
-.filter-icon { font-size: 16px; }
-.left-controls .filter,
-.post-meta .chip,
-#topics .chip {
-  border-color: #cfd2ff;
-  background: #f4f3ff;
-  color: #5b4fe0;
-}
 .post-meta .chip,
 #topics .chip {
   background: #eef4ff;
