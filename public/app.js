@@ -139,7 +139,7 @@ function postCard(post) {
   const commentCount = Array.isArray(post.comments) ? post.comments.length : (post.commentsCount || 0);
   const liked = !!state.likedPosts[post.id];
   const toggleComments = allComments.length > 2 ? `<span class="comment-toggle" data-toggle-comments="${post.id}">${showAll ? 'Hide comments' : 'View all comments'}</span>` : '';
-  return `<article class="card post-card"><h3>${post.title}</h3>${postImage}<p class="muted">${post.preview}</p><div class="post-meta"><strong class="author-link" data-author="${post.author}">${post.author}</strong> • ${post.time} <span class="chip">${post.topic}</span></div><div class="post-actions"><span><span class="action-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 5h16v10H8l-4 4z"></path></svg></span>${commentCount}${toggleComments}</span><button type="button" class="like-btn ${liked ? 'liked' : ''}" data-id="${post.id}"><span class="action-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M7 10v10H4V10z"></path><path d="M10 10V6a3 3 0 0 1 3-3l1 1-1 6h6a2 2 0 0 1 2 2l-1 8H10"></path></svg></span><span>${post.likes}</span></button></div><div class="stack" style="margin-top:10px">${comments}</div><form class="comment-form" data-id="${post.id}" style="margin-top:12px;display:flex;gap:8px;"><input name="user" placeholder="Your name" required /><input name="text" placeholder="Add a comment..." required style="flex:1" /><button class="btn secondary" type="submit">Reply</button></form></article>`;
+  return `<article class="card post-card"><h3>${post.title}</h3>${postImage}<p class="muted">${post.preview}</p><div class="post-meta"><strong class="author-link" data-author="${post.author}">${post.author}</strong> • ${post.time} <span class="chip">${post.topic}</span></div><div class="post-actions"><span><span class="action-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 5h16v10H8l-4 4z"></path></svg></span>${commentCount}${toggleComments}</span><button type="button" class="like-btn ${liked ? 'liked' : ''}" data-id="${post.id}"><span class="action-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M7 10v10H4V10z"></path><path d="M10 10V6a3 3 0 0 1 3-3l1 1-1 6h6a2 2 0 0 1 2 2l-1 8H10"></path></svg></span><span class="like-count">${post.likes}</span></button></div><div class="stack" style="margin-top:10px">${comments}</div><form class="comment-form" data-id="${post.id}" style="margin-top:12px;display:flex;gap:8px;"><input name="user" placeholder="Your name" required /><input name="text" placeholder="Add a comment..." required style="flex:1" /><button class="btn secondary" type="submit">Reply</button></form></article>`;
 }
 
 async function loadPosts() {
@@ -198,7 +198,7 @@ async function loadPosts() {
       state.likedPosts[postId] = nextLiked;
       localStorage.setItem('likedPosts', JSON.stringify(state.likedPosts));
       btn.classList.toggle('liked', nextLiked);
-      const countEl = btn.querySelector('span');
+      const countEl = btn.querySelector('.like-count');
       if (countEl) countEl.textContent = data.likes;
     } catch (err) {
       alert(err.message);
