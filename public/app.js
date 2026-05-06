@@ -63,9 +63,9 @@ async function uploadFile(file) {
 
 function renderPreview(url) { const img = qs('#previewImage'); const placeholder = qs('#previewPlaceholder'); if (!url) { img.style.display = 'none'; placeholder.style.display = 'block'; return; } img.src = url; img.style.display = 'block'; placeholder.style.display = 'none'; }
 function issueIcon(type) {
-  if (type === 'question') return '❓';
-  if (type === 'grid') return '▦';
-  return '⚠️';
+  if (type === 'question') return '<svg class="issue-icon-svg" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><path d="M9.5 9a2.5 2.5 0 0 1 5 0c0 2-2.5 2.4-2.5 4"></path><circle cx="12" cy="17" r="0.8" fill="currentColor" stroke="none"></circle></svg>';
+  if (type === 'grid') return '<svg class="issue-icon-svg" viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="4" width="7" height="7"></rect><rect x="13" y="4" width="7" height="7"></rect><rect x="4" y="13" width="7" height="7"></rect><rect x="13" y="13" width="7" height="7"></rect></svg>';
+  return '<svg class="issue-icon-svg" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3 2.5 20h19z"></path><path d="M12 9v5"></path><circle cx="12" cy="17" r="0.8" fill="currentColor" stroke="none"></circle></svg>';
 }
 function createIssueCard(issue) {
   const severityClass = issue.severity === 'High' ? 'high-risk' : 'danger';

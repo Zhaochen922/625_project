@@ -215,10 +215,11 @@ h3 { font-size: 20px; margin: 0; }
   flex: 1;
 }
 .search:focus { outline: none; }
-.search-wrap {
+ .search-wrap {
   border: 1px solid var(--border);
   border-radius: 12px;
-  min-width: 100%;
+  flex: 0 0 calc((100% - 20px) / 3);
+  max-width: calc((100% - 20px) / 3);
   display: flex;
   align-items: center;
   padding-left: 12px;
@@ -323,3 +324,23 @@ dialog { border: none; border-radius: 16px; box-shadow: var(--shadow); width: mi
 .message-header { align-items: center; }
 .message-title-row { display: flex; align-items: center; gap: 12px; }
 .back-btn { padding: 8px 14px; font-size: 15px; }
+
+
+.filter-icon, .toggle-password svg, .issue-icon-svg {
+  width: 20px;
+  height: 20px;
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.filter-icon { display:inline-flex; }
+.icon-box .issue-icon-svg { width: 30px; height: 30px; }
+.toggle-password { display: inline-flex; align-items: center; justify-content: center; padding: 4px; }
+@media (max-width: 1200px) {
+  .search-wrap {
+    flex: 1 1 100%;
+    max-width: 100%;
+  }
+}
