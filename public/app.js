@@ -61,7 +61,15 @@ async function uploadFile(file) {
 }
 
 function renderPreview(url) { const img = qs('#previewImage'); const placeholder = qs('#previewPlaceholder'); if (!url) { img.style.display = 'none'; placeholder.style.display = 'block'; return; } img.src = url; img.style.display = 'block'; placeholder.style.display = 'none'; }
-function createIssueCard(issue) { return `<article class="card item-card"><div class="icon-box danger">⚠</div><div><div class="row-between"><h3>${issue.title}</h3><span class="chip danger">${issue.principle}</span></div><p class="muted">${issue.description}</p></div></article>`; }
+function issueIcon(type) {
+  if (type === 'question') return '❓';
+  if (type === 'grid') return '▦';
+  return '⚠️';
+}
+function createIssueCard(issue) {
+  const severityClass = issue.severity === 'High' ? 'high-risk' : 'danger';
+  return `<article class="card item-card"><div class="icon-box danger">${issueIcon(issue.iconType)}</div><div><div class="row-between"><h3>${issue.title}</h3><span class="chip ${severityClass}">${issue.principle}</span></div><p class="muted">${issue.description}</p></div></article>`;
+}
 function createSuggestionCard(suggestion) { return `<article class="card item-card"><div class="icon-box success">✓</div><div><h3>${suggestion.text}</h3><span class="chip success">Impact: ${suggestion.impact}</span></div></article>`; }
 
 function setResultCounts(data) {
@@ -82,8 +90,26 @@ function appendChatBubble(container, text, role) {
 async function runAnalysis() {
   const data = await api('/api/analysis/run', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ imageUrl: state.uploadedImageUrl }) });
   state.currentAnalysis = data;
-  qs('#issuesList').innerHTML = data.issues.map(createIssueCard).join('');
-  qs('#suggestionsList').innerHTML = data.suggestions.map(createSuggestionCard).join('');
+  const initialIssueCount = 4;
+  const initialSuggestionCount = 4;
+  const renderIssueState = { expanded: false };
+  const renderSuggestionState = { expanded: false };
+  const issueHtml = () => data.issues.slice(0, renderIssueState.expanded ? data.issues.length : initialIssueCount).map(createIssueCard).join('');
+  const suggestionHtml = () => data.suggestions.slice(0, renderSuggestionState.expanded ? data.suggestions.length : initialSuggestionCount).map(createSuggestionCard).join('');
+  qs('#issuesList').innerHTML = `${issueHtml()}${data.issues.length > initialIssueCount ? `<div class="comment-toggle" id="moreIssues">+ ${renderIssueState.expanded ? 'Hide extra issues' : `${data.issues.length - initialIssueCount} more issues`}</div>` : ''}`;
+  qs('#suggestionsList').innerHTML = `${suggestionHtml()}${data.suggestions.length > initialSuggestionCount ? `<div class="comment-toggle" id="moreSuggestions">+ ${renderSuggestionState.expanded ? 'Hide extra suggestions' : `${data.suggestions.length - initialSuggestionCount} more suggestions`}</div>` : ''}`;
+  const bindResultsToggles = () => {
+    const issueMore = qs('#moreIssues');
+    if (issueMore) issueMore.addEventListener('click', () => { renderIssueState.expanded = !renderIssueState.expanded; runAnalysisRender(data, renderIssueState, renderSuggestionState); });
+    const suggestionMore = qs('#moreSuggestions');
+    if (suggestionMore) suggestionMore.addEventListener('click', () => { renderSuggestionState.expanded = !renderSuggestionState.expanded; runAnalysisRender(data, renderIssueState, renderSuggestionState); });
+  };
+  const runAnalysisRender = (analysisData, issueState, suggestionState) => {
+    qs('#issuesList').innerHTML = `${analysisData.issues.slice(0, issueState.expanded ? analysisData.issues.length : initialIssueCount).map(createIssueCard).join('')}${analysisData.issues.length > initialIssueCount ? `<div class="comment-toggle" id="moreIssues">+ ${issueState.expanded ? 'Hide extra issues' : `${analysisData.issues.length - initialIssueCount} more issues`}</div>` : ''}`;
+    qs('#suggestionsList').innerHTML = `${analysisData.suggestions.slice(0, suggestionState.expanded ? analysisData.suggestions.length : initialSuggestionCount).map(createSuggestionCard).join('')}${analysisData.suggestions.length > initialSuggestionCount ? `<div class="comment-toggle" id="moreSuggestions">+ ${suggestionState.expanded ? 'Hide extra suggestions' : `${analysisData.suggestions.length - initialSuggestionCount} more suggestions`}</div>` : ''}`;
+    bindResultsToggles();
+  };
+  bindResultsToggles();
   setResultCounts(data);
   const chatBox = qs('#analysisChatMessages');
   chatBox.innerHTML = '';
@@ -93,12 +119,16 @@ async function runAnalysis() {
 
 
 function postCard(post) {
-  const comments = post.comments?.map((c) => `<div class="muted small">${c.user}: ${c.text}</div>`).join('') || '';
+  const showAll = !!post.showAllComments;
+  const allComments = post.comments || [];
+  const commentsToShow = showAll ? allComments : allComments.slice(0, 2);
+  const comments = commentsToShow.map((c) => `<div class="muted small">${c.user}: ${c.text}</div>`).join('');
   const safeImage = post.imageUrl || '';
   const postImage = safeImage ? `<div class="post-image-wrap"><img src="${safeImage}" alt="Post upload" class="post-thumb" data-image-preview="${safeImage}" /></div>` : '';
   const commentCount = Array.isArray(post.comments) ? post.comments.length : (post.commentsCount || 0);
   const liked = !!state.likedPosts[post.id];
-  return `<article class="card post-card"><h3>${post.title}</h3>${postImage}<p class="muted">${post.preview}</p><div class="post-meta"><strong class="author-link" data-author="${post.author}">${post.author}</strong> • ${post.time} <span class="chip">${post.topic}</span></div><div class="post-actions">💬 ${commentCount} <button type="button" class="like-btn ${liked ? 'liked' : ''}" data-id="${post.id}">👍 <span>${post.likes}</span></button></div><div class="stack" style="margin-top:10px">${comments}</div><form class="comment-form" data-id="${post.id}" style="margin-top:12px;display:flex;gap:8px;"><input name="user" placeholder="Your name" required /><input name="text" placeholder="Add a comment..." required style="flex:1" /><button class="btn secondary" type="submit">Reply</button></form></article>`;
+  const toggleComments = allComments.length > 2 ? `<span class="comment-toggle" data-toggle-comments="${post.id}">${showAll ? 'Hide comments' : 'View all comments'}</span>` : '';
+  return `<article class="card post-card"><h3>${post.title}</h3>${postImage}<p class="muted">${post.preview}</p><div class="post-meta"><strong class="author-link" data-author="${post.author}">${post.author}</strong> • ${post.time} <span class="chip">${post.topic}</span></div><div class="post-actions"><span>🗨 ${commentCount}${toggleComments}</span><button type="button" class="like-btn ${liked ? 'liked' : ''}" data-id="${post.id}">👍 <span>${post.likes}</span></button></div><div class="stack" style="margin-top:10px">${comments}</div><form class="comment-form" data-id="${post.id}" style="margin-top:12px;display:flex;gap:8px;"><input name="user" placeholder="Your name" required /><input name="text" placeholder="Add a comment..." required style="flex:1" /><button class="btn secondary" type="submit">Reply</button></form></article>`;
 }
 
 async function loadPosts() {
@@ -111,6 +141,12 @@ async function loadPosts() {
   if (!Array.isArray(posts)) posts = [];
   const mergedPosts = [...state.localPosts, ...posts.filter((p) => !state.localPosts.some((lp) => lp.id === p.id))];
   qs('#postFeed').innerHTML = mergedPosts.map(postCard).join('');
+  qsa('[data-toggle-comments]').forEach((btn) => btn.addEventListener('click', () => {
+    const postId = Number(btn.dataset.toggleComments);
+    const target = mergedPosts.find((p) => p.id === postId);
+    if (target) target.showAllComments = !target.showAllComments;
+    loadPosts();
+  }));
   qsa('.comment-form').forEach((form) => form.addEventListener('submit', async (e) => {
     e.preventDefault();
     const postId = Number(form.dataset.id);
