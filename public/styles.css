@@ -427,3 +427,12 @@ h1 { font-size: 28px; }
 .post-actions { font-size: 12px; }
 .comment-form input { font-size: 12px; }
 .comment-form .btn { font-size: 12px; padding: 8px 12px; }
+
+
+/* spacing + title balance adjustments */
+#searchInput, #searchInput::placeholder { font-size: 12px; }
+#discussion .row-between h1, #results .row-between h1, #upload h1 { font-size: 26px; font-weight: 500; }
+#discussion .row-between p, #results .row-between p { margin-top: 2px; }
+#discussion .controls { margin-top: 10px; }
+#results .results-grid { margin-top: 8px; }
+#results .row-between { margin-bottom: 2px; }
