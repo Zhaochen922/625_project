@@ -6,7 +6,7 @@
   <title>UI Insight</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/styles.css" />
 </head>
 <body>
@@ -45,13 +45,13 @@
             <p class="muted">Upload any UI screenshot and let our AI analyze its usability and design.</p>
             <label id="dropZone" class="drop-zone">
               <input id="fileInput" type="file" accept="image/png,image/jpg,image/jpeg,image/webp" hidden>
-              <div class="upload-icon">☁︎</div>
+              <div class="upload-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M7 18a4 4 0 1 1 .8-7.9A5.5 5.5 0 0 1 19 12.5a3.5 3.5 0 0 1-1 6.8H7z"></path><path d="M12 10v8"></path><path d="M9.5 15.5 12 18l2.5-2.5"></path></svg></div>
               <h3>Drag & drop your screenshot here</h3>
               <div class="muted">or</div>
               <span class="btn secondary">Browse File</span>
               <p class="muted small">Supports PNG, JPG, JPEG, WEBP (max 10MB)</p>
             </label>
-            <div class="tip card">💡 Tip: Upload clear, high-resolution screenshots for the most accurate analysis.</div>
+            <div class="tip card"><span class="tip-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M9 18h6"></path><path d="M10 21h4"></path><path d="M8 10a4 4 0 1 1 8 0c0 1.7-.8 2.5-1.6 3.4-.6.7-1.2 1.4-1.4 2.6h-2c-.2-1.2-.8-1.9-1.4-2.6C8.8 12.5 8 11.7 8 10z"></path></svg></span><span>Tip: Upload clear, high-resolution screenshots for the most accurate analysis.</span></div>
           </div>
           <div class="upload-right card">
             <h2>Preview</h2>
@@ -59,9 +59,9 @@
               <img id="previewImage" alt="Upload preview" />
               <div id="previewPlaceholder" class="muted">No image uploaded yet.</div>
             </div>
-            <button id="changeFileBtn" class="btn secondary">Change File</button>
+            <button id="changeFileBtn" class="btn secondary icon-btn"><span class="btn-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M21 12a9 9 0 1 1-2.64-6.36"></path><path d="M21 4v6h-6"></path></svg></span>Change File</button>
             <button id="runAnalysisBtn" class="btn analysis-btn">Run AI Analysis</button>
-            <p class="muted center upload-privacy">🔒 Your data is private and secure</p>
+            <p class="muted center upload-privacy"><span class="inline-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="10" rx="2"></rect><path d="M8 11V8a4 4 0 0 1 8 0v3"></path></svg></span>Your data is private and secure</p>
           </div>
         </div>
       </section>
@@ -72,7 +72,7 @@
             <h1>Analysis Results</h1>
             <p class="muted">AI identified usability issues and suggested practical improvements.</p>
           </div>
-          <button class="btn secondary">Download Report</button>
+          <button class="btn secondary download-btn"><span class="btn-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 4v11"></path><path d="M8.5 11.5 12 15l3.5-3.5"></path><path d="M5 19h14"></path></svg></span>Download Report</button>
         </div>
         <div class="results-grid">
           <div>
