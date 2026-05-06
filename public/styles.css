@@ -368,3 +368,17 @@ h3 { font-size: 20px; margin: 0; font-weight: 520; }
 
 .top-nav, .main { border-left: none; border-right: none; border-radius: 0; }
 .main { min-height: calc(100vh - 86px); }
+
+
+/* content downsizing without scaling page container */
+.main { padding: 22px; }
+.upload-grid, .results-grid, .discussion-grid, .profile-grid { gap: 16px; }
+h1 { font-size: 34px; }
+h2 { font-size: 24px; }
+h3 { font-size: 18px; }
+.muted, p, label { font-size: 15px; }
+.btn { padding: 12px 22px; font-size: 15px; }
+.tab { font-size: 15px; padding: 8px 12px; }
+.drop-zone { min-height: 390px; }
+.preview-frame { min-height: 480px; }
+.icon-box { width: 68px; height: 68px; }
