@@ -67,11 +67,38 @@ function issueIcon(type) {
   if (type === 'grid') return '<svg class="issue-icon-svg" viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="4" width="7" height="7"></rect><rect x="13" y="4" width="7" height="7"></rect><rect x="4" y="13" width="7" height="7"></rect><rect x="13" y="13" width="7" height="7"></rect></svg>';
   return '<svg class="issue-icon-svg" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3 2.5 20h19z"></path><path d="M12 9v5"></path><circle cx="12" cy="17" r="0.8" fill="currentColor" stroke="none"></circle></svg>';
 }
-function createIssueCard(issue) {
-  const severityClass = issue.severity === 'High' ? 'high-risk' : 'danger';
-  return `<article class="card item-card"><div class="icon-box danger">${issueIcon(issue.iconType)}</div><div><div class="row-between"><h3>${issue.title}</h3><span class="chip ${severityClass}">${issue.principle}</span></div><p class="muted">${issue.description}</p></div></article>`;
+function buildIssueDetail(issue) {
+  return `${issue.description}\n\nWhy it matters: This issue can reduce task completion speed and confidence, especially for first-time users.\n\nWhat to improve: Prioritize this area in your next iteration, prototype one focused fix, and validate with 3-5 quick usability tests.`;
 }
-function createSuggestionCard(suggestion) { return `<article class="card item-card"><div class="icon-box success">✓</div><div><h3>${suggestion.text}</h3><span class="chip success">Impact: ${suggestion.impact}</span></div></article>`; }
+
+function buildSuggestionDetail(suggestion) {
+  return `${suggestion.text}\n\nExpected impact: ${suggestion.impact}.\n\nHow to implement: Apply this change incrementally, compare before/after behavior, and confirm the update improves clarity and interaction flow.`;
+}
+
+function createIssueCard(issue, index) {
+  const severityClass = issue.severity === 'High' ? 'high-risk' : 'danger';
+  return `<article class="card item-card result-clickable" data-detail-type="issue" data-detail-index="${index}"><div class="icon-box danger">${issueIcon(issue.iconType)}</div><div><div class="row-between"><div class="result-card-head"><h3>${issue.title}</h3><span class="minimal-arrow" aria-hidden="true">→</span></div><span class="chip ${severityClass}">${issue.principle}</span></div><p class="muted">${issue.description}</p></div></article>`;
+}
+function createSuggestionCard(suggestion, index) { return `<article class="card item-card result-clickable" data-detail-type="suggestion" data-detail-index="${index}"><div class="icon-box success">✓</div><div><div class="result-card-head"><h3>${suggestion.text}</h3><span class="minimal-arrow" aria-hidden="true">→</span></div><span class="chip success">Impact: ${suggestion.impact}</span></div></article>`; }
+
+function bindResultDetailCards(data) {
+  qsa('.result-clickable').forEach((card) => card.addEventListener('click', () => {
+    const detailType = card.dataset.detailType;
+    const detailIndex = Number(card.dataset.detailIndex || 0);
+    if (detailType === 'issue') {
+      const issue = data.issues?.[detailIndex];
+      if (!issue) return;
+      qs('#resultDetailTitle').textContent = issue.title;
+      qs('#resultDetailBody').textContent = buildIssueDetail(issue);
+    } else {
+      const suggestion = data.suggestions?.[detailIndex];
+      if (!suggestion) return;
+      qs('#resultDetailTitle').textContent = suggestion.text;
+      qs('#resultDetailBody').textContent = buildSuggestionDetail(suggestion);
+    }
+    qs('#resultDetailDialog').showModal();
+  }));
+}
 
 function setResultCounts(data) {
   const issueCount = data?.issues?.length ?? qs('#issuesList').children.length;
@@ -119,8 +146,10 @@ async function runAnalysis() {
     qs('#issuesList').innerHTML = `${analysisData.issues.slice(0, issueState.expanded ? analysisData.issues.length : initialIssueCount).map(createIssueCard).join('')}${analysisData.issues.length > initialIssueCount ? `<div class="comment-toggle" id="moreIssues">+ ${issueState.expanded ? 'Hide extra issues' : `${analysisData.issues.length - initialIssueCount} more issues`}</div>` : ''}`;
     qs('#suggestionsList').innerHTML = `${analysisData.suggestions.slice(0, suggestionState.expanded ? analysisData.suggestions.length : initialSuggestionCount).map(createSuggestionCard).join('')}${analysisData.suggestions.length > initialSuggestionCount ? `<div class="comment-toggle" id="moreSuggestions">+ ${suggestionState.expanded ? 'Hide extra suggestions' : `${analysisData.suggestions.length - initialSuggestionCount} more suggestions`}</div>` : ''}`;
     bindResultsToggles();
+    bindResultDetailCards(analysisData);
   };
   bindResultsToggles();
+  bindResultDetailCards(data);
   setResultCounts(data);
   const chatBox = qs('#analysisChatMessages');
   chatBox.innerHTML = '';
@@ -271,6 +300,7 @@ async function init() {
   });
 
   qs('#closeImagePreview').addEventListener('click', () => qs('#imagePreviewDialog').close());
+  qs('#closeResultDetail').addEventListener('click', () => qs('#resultDetailDialog').close());
   qs('#closeProfileDialog').addEventListener('click', () => qs('#userProfileDialog').close());
   qs('#closeMessageDialog').addEventListener('click', () => qs('#messageDialog').close());
   qs('#messageUserBtn').addEventListener('click', () => { qs('#userProfileDialog').close(); state.messageThread = []; qs('#messageThread').innerHTML = ''; qs('#messageDialog').showModal(); });

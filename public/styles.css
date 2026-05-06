@@ -1121,3 +1121,57 @@ h1 {
 .tab { font-size: 15px; }
 .like-btn.liked { color: #d02e2e; }
 .like-btn.liked .action-icon svg { fill: currentColor; stroke: currentColor; }
+
+/* discussion + results interaction polish */
+.post-card h3 {
+  color: #111827;
+  font-weight: 700;
+}
+
+.like-count {
+  font-size: 12px;
+}
+
+.like-btn.liked {
+  color: #5f6a86;
+}
+
+.like-btn.liked .action-icon svg {
+  fill: currentColor;
+  stroke: currentColor;
+}
+
+#postDialog input[type="file"] {
+  font-size: 12px;
+}
+
+#postDialog input[type="file"]::file-selector-button {
+  padding: 6px 10px;
+  font-size: 12px;
+}
+
+.result-clickable {
+  cursor: pointer;
+}
+
+.result-card-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.minimal-arrow {
+  color: #6b7280;
+  font-size: 14px;
+  line-height: 1;
+}
+
+.result-detail-content {
+  min-width: min(560px, 90vw);
+}
+
+#resultDetailBody {
+  font-size: 14px;
+  line-height: 1.55;
+}
