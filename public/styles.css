@@ -281,7 +281,15 @@ h3 {
   place-items: center;
   overflow: hidden;
 }
-.preview-frame img { width: 82%; height: 82%; max-width: 82%; max-height: 82%; object-fit: contain; display: none; }
+
+.preview-frame img {
+  width: 93%;
+  height: 93%;
+  max-width: 93%;
+  max-height: 93%;
+  object-fit: contain;
+  display: none;
+}
 
 .results-grid {
   margin-top: 0px;
@@ -305,7 +313,10 @@ h3 {
 }
 
 #issuesList .item-card p,
-#suggestionsList .item-card h3 { margin-bottom: 0; }
+#suggestionsList .item-card h3 {
+  margin-bottom: 0;
+}
+
 .icon-box {
   width: 78px;
   height: 78px;
@@ -392,12 +403,16 @@ h3 {
   min-width: 0;
   flex: 1;
 }
-.search:focus { outline: none; }
+
+.search:focus {
+  outline: none;
+}
+
 .search::placeholder {
   font-size: 15px;
 }
 
- .search-wrap {
+.search-wrap {
   border: 1px solid var(--border);
   border-radius: 12px;
   flex: 0 0 calc((100% - 20px) / 3);
@@ -1097,30 +1112,94 @@ h1 {
 
 
 /* final tuning pass */
-.brand-title { font-weight: 500; }
-.brand-sub { font-size: 12px; }
-.tab { font-size: 13px; font-weight: 500; }
-.main { border-top: 1px solid #eff2f8; }
-.row-between.section-title h2 { font-size: 18px; font-weight: 340; }
-.item-card { padding: 11px 11px 6px; min-height: 112px; }
-#issuesList .item-card p, #suggestionsList .item-card h3 { margin-bottom: 1px; }
-.post-card { padding: 14px; }
-.post-card h3 { font-size: 14px; }
-.post-card .muted { font-size: 13px; }
-.post-meta { font-size: 12px; }
-.post-meta .author-link { font-size: 12px; }
-.post-actions { font-size: 12px; }
-.comment-form input { font-size: 12px; }
-.comment-form .btn { font-size: 12px; padding: 8px 12px; }
+.brand-title {
+  font-weight: 500;
+}
 
-.like-count { font-size: 16px; line-height: 1; }
+.brand-sub {
+  font-size: 12px;
+}
+
+.tab {
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.main {
+  border-top: 1px solid #eff2f8;
+}
+
+.row-between.section-title h2 {
+  font-size: 18px;
+  font-weight: 340;
+}
+
+.item-card {
+  padding: 11px 11px 6px;
+  min-height: 112px;
+}
+
+#issuesList .item-card p,
+#suggestionsList .item-card h3 {
+  margin-bottom: 1px;
+}
+
+.post-card {
+  padding: 14px;
+}
+
+.post-card h3 {
+  font-size: 14px;
+}
+
+.post-card .muted {
+  font-size: 13px;
+}
+
+.post-meta {
+  font-size: 12px;
+}
+
+.post-meta .author-link {
+  font-size: 12px;
+}
+
+.post-actions {
+  font-size: 12px;
+}
+
+.comment-form input {
+  font-size: 12px;
+}
+
+.comment-form .btn {
+  font-size: 12px;
+  padding: 8px 12px;
+}
+
+.like-count {
+  font-size: 16px;
+  line-height: 1;
+}
 
 
 /* user-requested typography + interaction updates */
-.tabs { gap: 34px; }
-.tab { font-size: 15px; }
-.like-btn.liked { color: #d02e2e; }
-.like-btn.liked .action-icon svg { fill: currentColor; stroke: currentColor; }
+.tabs {
+  gap: 34px;
+}
+
+.tab {
+  font-size: 15px;
+}
+
+.like-btn.liked {
+  color: #d02e2e;
+}
+
+.like-btn.liked .action-icon svg {
+  fill: currentColor;
+  stroke: currentColor;
+}
 
 /* discussion + results interaction polish */
 .post-card h3 {
