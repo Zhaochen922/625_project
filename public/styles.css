@@ -195,6 +195,9 @@ h3 { font-size: 20px; margin: 0; }
   padding: 12px 20px;
   font-size: 20px;
   cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
 }
 .filter.active { border-color: #8791ff; color: var(--primary); background: #f4f6ff; }
 .post-meta .chip,
