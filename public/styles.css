@@ -22,13 +22,12 @@ body {
 }
 
 .app-shell {
-  --ui-scale: 0.84;
-  padding: 16px;
-  max-width: 1600px;
-  margin: 0 auto;
-  width: calc(100% / var(--ui-scale));
-  transform: scale(var(--ui-scale));
-  transform-origin: top center;
+  --ui-scale: 1;
+  padding: 0;
+  max-width: none;
+  margin: 0;
+  width: 100%;
+  transform: none;
 }
 .card {
   background: var(--surface);
@@ -39,7 +38,7 @@ body {
 
 .top-nav {
   position: sticky;
-  top: 16px;
+  top: 0px;
   z-index: 3;
   display: flex;
   align-items: center;
@@ -148,7 +147,7 @@ h3 { font-size: 20px; margin: 0; }
 .preview-frame img { width: 100%; height: 100%; object-fit: contain; display: none; }
 
 .results-grid {
-  margin-top: 16px;
+  margin-top: 0px;
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 18px;
@@ -344,3 +343,42 @@ dialog { border: none; border-radius: 16px; box-shadow: var(--shadow); width: mi
     max-width: 100%;
   }
 }
+
+/* visual refinement */
+body { font-weight: 400; }
+h1 { font-size: 38px; margin: 0 0 8px; font-weight: 600; }
+h2 { font-size: 28px; margin: 0; font-weight: 560; }
+h3 { font-size: 20px; margin: 0; font-weight: 520; }
+.muted, p, label, .btn, .tab, .chip { font-weight: 400; }
+.row-between.section-title h2 { font-weight: 540; }
+#suggestionsList .item-card h3 { font-weight: 400; }
+.main { margin-top: 0; border-top-left-radius: 0; border-top-right-radius: 0; border-top: 1px solid #e8ebf2; }
+.top-nav { border-bottom-left-radius: 0; border-bottom-right-radius: 0; margin-bottom: 0; }
+.tabs { gap: 24px; background: transparent; border-radius: 0; padding: 0; }
+.upload-icon { color: #7b84a8; }
+.upload-icon svg { width: 72px; height: 72px; fill: none; stroke: currentColor; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
+.tip { display: flex; align-items: flex-start; gap: 10px; background: #f7f3ff; border-color: #e9e2ff; }
+.tip-icon svg { width: 26px; height: 26px; margin-top: 2px; fill: none; stroke: #5f6a86; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
+.icon-btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; box-shadow: 0 4px 14px rgba(34, 42, 70, 0.08); margin: 0 auto; }
+#changeFileBtn { min-width: 210px; }
+#runAnalysisBtn { width: 320px; padding: 16px 28px; font-size: 18px; }
+.download-btn { box-shadow: 0 4px 14px rgba(54, 62, 88, 0.1); }
+.btn-icon svg { width: 16px; height: 16px; fill: none; stroke: #99a1b5; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+.inline-icon svg { width: 16px; height: 16px; vertical-align: -2px; margin-right: 6px; fill: none; stroke: #7f8799; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+
+.top-nav, .main { border-left: none; border-right: none; border-radius: 0; }
+.main { min-height: calc(100vh - 86px); }
+
+
+/* content downsizing without scaling page container */
+.main { padding: 18px; }
+.upload-grid, .results-grid, .discussion-grid, .profile-grid { gap: 14px; }
+h1 { font-size: 32px; }
+h2 { font-size: 22px; }
+h3 { font-size: 17px; }
+.muted, p, label { font-size: 14px; }
+.btn { padding: 11px 20px; font-size: 14px; }
+.tab { font-size: 14px; padding: 7px 10px; }
+.drop-zone { min-height: 360px; }
+.preview-frame { min-height: 440px; }
+.icon-box { width: 62px; height: 62px; }
