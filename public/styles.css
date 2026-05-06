@@ -159,6 +159,11 @@ h3 { font-size: 20px; margin: 0; }
   gap: 14px;
   padding: 16px;
   align-items: start;
+  min-height: 150px;
+}
+#suggestionsList .item-card .chip.success {
+  display: inline-block;
+  margin-top: 12px;
 }
 .icon-box {
   width: 78px; height: 78px; border-radius: 14px; display: grid; place-items: center;
@@ -212,6 +217,12 @@ h3 { font-size: 20px; margin: 0; }
 .stat { border: 1px solid var(--border); border-radius: 12px; padding: 12px; }
 .profile-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
 .form-card { padding: 18px; display: flex; flex-direction: column; gap: 14px; }
+#profileForm label { max-width: 86%; }
+#profileForm textarea { min-height: 74px; }
+#passwordForm label { max-width: 95%; }
+#passwordForm input { min-height: 50px; }
+#profileForm .btn.primary,
+#passwordForm .btn.primary { width: 260px; margin-top: auto; }
 label { display: flex; flex-direction: column; gap: 8px; font-size: 18px; color: #425073; }
 input, textarea {
   border: 1px solid var(--border);
@@ -261,3 +272,7 @@ dialog { border: none; border-radius: 16px; box-shadow: var(--shadow); width: mi
 
 .like-btn { border:none; background:transparent; cursor:pointer; font-size:18px; color:#4f5f82; }
 .like-btn.liked { color:#d02e2e; font-weight:700; }
+
+.message-header { align-items: center; }
+.message-title-row { display: flex; align-items: center; gap: 12px; }
+.back-btn { padding: 8px 14px; font-size: 15px; }
