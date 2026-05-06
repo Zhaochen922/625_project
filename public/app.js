@@ -6,7 +6,8 @@ const state = {
   selectedProfile: null,
   messageThread: [],
   localPosts: [],
-  likedPosts: JSON.parse(localStorage.getItem('likedPosts') || '{}')
+  likedPosts: JSON.parse(localStorage.getItem('likedPosts') || '{}'),
+  expandedComments: {}
 };
 
 const qs = (sel) => document.querySelector(sel);
@@ -119,7 +120,7 @@ async function runAnalysis() {
 
 
 function postCard(post) {
-  const showAll = !!post.showAllComments;
+  const showAll = !!state.expandedComments[post.id];
   const allComments = post.comments || [];
   const commentsToShow = showAll ? allComments : allComments.slice(0, 2);
   const comments = commentsToShow.map((c) => `<div class="muted small">${c.user}: ${c.text}</div>`).join('');
@@ -143,8 +144,7 @@ async function loadPosts() {
   qs('#postFeed').innerHTML = mergedPosts.map(postCard).join('');
   qsa('[data-toggle-comments]').forEach((btn) => btn.addEventListener('click', () => {
     const postId = Number(btn.dataset.toggleComments);
-    const target = mergedPosts.find((p) => p.id === postId);
-    if (target) target.showAllComments = !target.showAllComments;
+    state.expandedComments[postId] = !state.expandedComments[postId];
     loadPosts();
   }));
   qsa('.comment-form').forEach((form) => form.addEventListener('submit', async (e) => {
@@ -264,6 +264,7 @@ async function init() {
   qs('#closeProfileDialog').addEventListener('click', () => qs('#userProfileDialog').close());
   qs('#closeMessageDialog').addEventListener('click', () => qs('#messageDialog').close());
   qs('#messageUserBtn').addEventListener('click', () => { qs('#userProfileDialog').close(); state.messageThread = []; qs('#messageThread').innerHTML = ''; qs('#messageDialog').showModal(); });
+  qs('#messageBackBtn').addEventListener('click', () => { qs('#messageDialog').close(); qs('#userProfileDialog').showModal(); });
   qs('#messageForm').addEventListener('submit', async (e) => {
     e.preventDefault();
     const input = qs('#messageInput'); const text = input.value.trim(); if (!text) return; input.value = '';
