@@ -78,16 +78,20 @@ const userDirectory = {
 
 const sampleAnalysis = {
   issues: [
-    { id: 1, title: 'Low Color Contrast', description: 'Some text elements have insufficient contrast against their background.', principle: 'Visibility', severity: 'High' },
-    { id: 2, title: 'Inconsistent Spacing', description: 'Spacing between elements varies, creating a less predictable layout.', principle: 'Consistency', severity: 'Medium' },
-    { id: 3, title: 'Unclear Visual Hierarchy', description: 'Important elements do not stand out, making it hard for users to focus.', principle: 'Hierarchy', severity: 'High' },
-    { id: 4, title: 'Missing Affordances', description: 'Some interactive elements do not look clickable or actionable.', principle: 'Learnability', severity: 'Medium' }
+    { id: 1, title: 'Low Color Contrast', description: 'Some text elements have insufficient contrast against their background.', principle: 'Visibility', severity: 'Medium', iconType: 'alert' },
+    { id: 2, title: 'Inconsistent Spacing', description: 'Spacing between elements varies, creating a less predictable layout.', principle: 'Consistency', severity: 'Medium', iconType: 'grid' },
+    { id: 3, title: 'Unclear Visual Hierarchy', description: 'Important elements do not stand out, making it hard for users to focus.', principle: 'Hierarchy', severity: 'High', iconType: 'grid' },
+    { id: 4, title: 'Missing Affordances', description: 'Some interactive elements do not look clickable or actionable.', principle: 'Learnability', severity: 'Medium', iconType: 'question' },
+    { id: 5, title: 'Weak Error Prevention', description: 'Form inputs accept invalid formats without immediate guidance.', principle: 'Error Prevention', severity: 'High', iconType: 'alert' },
+    { id: 6, title: 'Overloaded Primary Action Zone', description: 'Too many competing buttons appear in a single focus area.', principle: 'Focus', severity: 'Medium', iconType: 'alert' }
   ],
   suggestions: [
     { id: 1, text: 'Increase contrast between text and background to meet WCAG AA standards.', impact: 'High' },
     { id: 2, text: 'Use a consistent spacing scale (e.g., 8px grid) for margins and paddings.', impact: 'Medium' },
     { id: 3, text: 'Strengthen hierarchy using size, weight, color, and whitespace.', impact: 'High' },
-    { id: 4, text: 'Add clear visual cues for interactive elements (hover/button styles).', impact: 'Medium' }
+    { id: 4, text: 'Add clear visual cues for interactive elements (hover/button styles).', impact: 'Medium' },
+    { id: 5, text: 'Add inline validation and friendly helper copy before form submission.', impact: 'High' },
+    { id: 6, text: 'Reduce competing call-to-actions so users can identify the main next step quickly.', impact: 'Medium' }
   ]
 };
 
