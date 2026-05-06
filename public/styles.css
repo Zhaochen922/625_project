@@ -389,3 +389,23 @@ h3 { font-size: 16px; }
 /* unify Inter Regular across site */
 body, input, textarea, button { font-weight: 400; }
 h1, h2, h3, .brand-title, .btn.primary, .analysis-btn, .chip, strong { font-weight: 400; }
+
+
+/* additional compact typography tweaks */
+h1 { font-size: 28px; }
+.tip { font-size: 14px; }
+.item-card { padding: 12px 12px 8px; min-height: 120px; }
+#issuesList .item-card p, #suggestionsList .item-card h3 { margin-bottom: 2px; }
+.row-between.section-title h2 { font-weight: 360; }
+.chip { font-size: 12px; }
+#suggestionsList .chip.success { font-size: 12px; }
+.filter { font-size: 16px; padding: 10px 16px; }
+.chat-bubble { font-size: 14px; }
+#analysisChatInput, #analysisChatInput::placeholder { font-size: 13px; }
+#profileForm input, #profileForm textarea, #profileForm input::placeholder, #profileForm textarea::placeholder { font-size: 14px; }
+#passwordForm input, #passwordForm input::placeholder { font-size: 14px; }
+.post-actions { color: #5f6a86; }
+.action-icon { display:inline-flex; width:16px; height:16px; color:#6d768f; }
+.action-icon svg { width:16px; height:16px; fill:none; stroke:currentColor; stroke-width:1.7; stroke-linecap:round; stroke-linejoin:round; }
+.like-btn { color:#5f6a86; }
+.like-btn.liked { color:#5f6a86; font-weight:400; }
