@@ -371,14 +371,14 @@ h3 { font-size: 20px; margin: 0; font-weight: 520; }
 
 
 /* content downsizing without scaling page container */
-.main { padding: 22px; }
-.upload-grid, .results-grid, .discussion-grid, .profile-grid { gap: 16px; }
-h1 { font-size: 34px; }
-h2 { font-size: 24px; }
-h3 { font-size: 18px; }
-.muted, p, label { font-size: 15px; }
-.btn { padding: 12px 22px; font-size: 15px; }
-.tab { font-size: 15px; padding: 8px 12px; }
-.drop-zone { min-height: 390px; }
-.preview-frame { min-height: 480px; }
-.icon-box { width: 68px; height: 68px; }
+.main { padding: 18px; }
+.upload-grid, .results-grid, .discussion-grid, .profile-grid { gap: 14px; }
+h1 { font-size: 32px; }
+h2 { font-size: 22px; }
+h3 { font-size: 17px; }
+.muted, p, label { font-size: 14px; }
+.btn { padding: 11px 20px; font-size: 14px; }
+.tab { font-size: 14px; padding: 7px 10px; }
+.drop-zone { min-height: 360px; }
+.preview-frame { min-height: 440px; }
+.icon-box { width: 62px; height: 62px; }
